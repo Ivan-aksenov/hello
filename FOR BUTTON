@@ -1,5 +1,86 @@
 <!--THIS IS THE BEST SO FAR-->
 
+//FUNCTIONALITY 
+//THIS IS FOR V.JS USING TAILWIND 
+
+<script setup >
+
+    //for form
+        import { ref } from 'vue'
+
+    const popup = ref(true);
+    function popmodal(){
+        popup.value = false
+    }
+            
+    const isModalHidden = ref(true);
+    function openModal(){
+        isModalHidden.value = false
+    }
+
+    const employees = ref([]);
+    const newEmployee = ref({
+        photoURL: '',
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        email: '',
+        department: '',
+        idNo: '',
+        active: false,
+        deactivated: false,
+    });
+
+    function toggleHiddenDiv() {
+    showHiddenDiv.value = !showHiddenDiv.value;
+    }
+
+    function addEmployee(){
+
+        employees.value.push({
+            photoURL: newEmployee.value.photoURL,
+            firstName: newEmployee.value.firstName,
+            middleName: newEmployee.value.middleName,
+            lastName: newEmployee.value.lastName,
+            email: newEmployee.value.email,
+            department: newEmployee.value.department,
+            idNo: newEmployee.value.idNo,
+            active: newEmployee.value.active,
+            deactivated: newEmployee.value.deactivated,
+        });
+
+        newEmployee.value ={
+            photoURL: '',
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            email: '',
+            department: '',
+            idNo: '',
+            active: false,
+            deactivated: false,
+        };
+    }
+
+    const formattedDate = new Date().toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+    });
+
+    const selectedEmployeeIndex = ref(null);
+    function showDetails(index) {
+        selectedEmployeeIndex.value = index;
+    }
+
+    function hideDetails() {
+        selectedEmployeeIndex.value = null;
+    }
+
+
+</script>
+
+
            <tbody>
                             <tr v-for="(employee, index) in employees" :key="index" @click="popmodal()">
                                 <td class = "py-2 px-1" > 
