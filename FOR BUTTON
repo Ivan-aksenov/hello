@@ -1,29 +1,31 @@
-<script setup >
+<!--THIS IS THE BEST SO FAR-->
 
-    const isModalHidden = ref(true);
-    function openModal(){
-        isModalHidden.value = false
-    }
+           <tbody>
+                            <tr v-for="(employee, index) in employees" :key="index" @click="popmodal()">
+                                <td class = "py-2 px-1" > 
+                                    <div class = "text-[#101828]">{{ employee.firstName }} {{ employee.middleName }} {{ employee.lastName }} </div>
+                                    <div class = "text-[#667085]">{{  employee.idNo }}</div></td>
+                                <td class = "text-[#667085] py-2 px-3">{{ formattedDate }}</td>
+                                <td class = "text-[#667085] py-2 px-3">{{ employee.email }}</td>
+                                <td class = "text-[#667085] py-2 px-3">{{ employee.department }}</td>
+                                <td class="text-[#667085] py-2 px-3" :style = "{'color' : employee.active ? 'green' : (employee.deactivated ? 'red' : '')}">
+                                    {{ employee.active ? 'Active' : (employee.deactivated ? 'Deactivated':'')}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>  
 
-</script>
-
-<!-- Modal Trigger Button -->
-            <div class="">
-                        <a href="#" class="text-m left-20 text-start hidden md:block px-12 p-2 text-white bg-red-500 rounded baseline" @click="openModal()" >+ New</a>
-                    </div>
-
-                    <!-- Modal -->
-                    <div :class="{ 'hidden': isModalHidden }" class="fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75" id="modal">
-                        <div class="flex items-center justify-center min-h-screen">
-                            <div class="bg-white p-8 rounded shadow-md w-3/4 md:w-1/2 lg:w-1/3">
+                    <div :class="{ 'hidden': popup }" class="fixed inset-0 z-50 overflow-auto" id="modal">
+                        <div class="flex items-center justify-center h-screen">
+                            <div class="bg-white p-2 rounded shadow-md w-96">
                                 <!-- MODAL FORM -->
-                                <div class="flex p-8 space-x-8">
+                                <div class="flex flex-col p-2 space-x-2">
                                     <!-- Left side with Upload button -->
                                     <div class="w-1/4 flex flex-col">
-                                        <label class=" font-semibold py-2 px-4 rounded cursor-pointer block text-center text-white-500 underline decoration-1 visited:text-sky-500">
+                                        <label class="font-semibold py-2 px-4 rounded cursor-pointer block text-center text-white-500 underline decoration-1 visited:text-sky-500">
                                             <div class="flex flex-col items-center">
-                                                <div class="flex space-x-2 border-2 border-gray-500 p-10 border-dashed">
-                                                    <img src="~/assets/upload.svg" class="w-10 h-10 " alt="Upload Icon">
+                                                <div class="flex space-x-2 border-2 border-gray-500 p-2 border-dashed rounded">
+                                                    <img src="~/assets/upload.svg" class="w-10 h-10" alt="Upload Icon">
                                                 </div>
                                                 <span class="mt-2">Upload File</span>
                                             </div>
@@ -31,46 +33,47 @@
                                         </label>
                                     </div>
 
-                <!-- Right side with form fields -->
-                <div class="w-3/4">
-                    <div class="space-y-4">
-                        <!-- Name fields -->
-                        <div class="grid grid-cols-4 gap-10">
-                            <input type="text" class="p-2 border rounded" placeholder="First Name">
-                            <input type="text" class="p-2 border rounded" placeholder="Middle Name">
-                            <input type="text" class="p-2 border rounded" placeholder="Last Name">
-                            <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-4 rounded">
-                                Add
-                            </button>
-                        </div>
+                                    <!-- Right side with form fields -->
+                                    <div class="w-3/4">
+                                        <div class="space-y-2">
+                                            <!-- Name fields -->
+                                            <div class="grid grid-cols-3 gap-2">
+                                                <input type="text" class="p-2 border rounded" id="fName" placeholder="First Name" v-model="newEmployee.firstName" required>
+                                                <input type="text" class="p-2 border rounded" id="mname" placeholder="Middle Name" v-model="newEmployee.middleName" required>
+                                                <input type="text" class="p-2 border rounded" id="lname" placeholder="Last Name" v-model="newEmployee.lastName" required>
+                                            </div>
 
-                        <!-- Email, Department, ID No. -->
-                        <div class="grid grid-cols-4 gap-10 items-center">
-                            <input type="email" class="p-2 border rounded" placeholder="Email">
-                            <input type="text" class="p-2 border rounded" placeholder="Department">
-                            <input type="text" class="p-2 border rounded" placeholder="ID No.">
-                            <button @click=" isModalHidden = true " class="bg-gray-500 hover:bg-gray-400 text-white font-semibold py-4 rounded">
-                                Cancel
-                            </button>
-                        </div>
+                                            <!-- Email, Department, ID No. -->
+                                            <div class="grid grid-cols-3 gap-2 items-center">
+                                                <input type="email" class="p-2 border rounded" id="email" placeholder="Email" v-model="newEmployee.email" required>
+                                                <input type="text" class="p-2 border rounded" id="department" placeholder="Department" v-model="newEmployee.department" required>
+                                                <input type="text" class="p-2 border rounded" id="ID" placeholder="ID No." v-model="newEmployee.idNo" required>
+                                            </div>
 
-                        <!-- Checkboxes for Active and Deactive -->
-                        <div class="flex space-x-4">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600">
-                                <span class="ml-2">Active</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600">
-                                <span class="ml-2">Deactive</span>
-                            </label>
+                                            <!-- Buttons -->
+                                            <div class="flex space-x-2">
+                                                <button @click="addEmployee" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+                                                    Add
+                                                </button>
+                                                <button @click="popup = true" class="bg-gray-500 hover:bg-gray-400 text-white font-semibold py-2 px-4 rounded">
+                                                    Cancel
+                                                </button>
+                                            </div>
+
+                                            <!-- Checkboxes for Active and Deactive -->
+                                            <div class="flex space-x-2">
+                                                <label class="flex items-center">
+                                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600" id="active-checkbox" for="active-checkbox" v-model="newEmployee.active">
+                                                    <span class="ml-2">Active</span>
+                                                </label>
+                                                <label class="flex items-center" for="deactivated-checkbox">
+                                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600" id="deactivated-checkbox">
+                                                    <span class="ml-2">Deactive</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-        </div>
-    </div>
